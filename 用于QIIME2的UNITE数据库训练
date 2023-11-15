@@ -1,0 +1,19 @@
+# 数据从UNITE官方下载
+qiime tools import \
+--type FeatureData[Sequence] \
+--input-path /home/zwang/Database/UNITE_qiime/sh_refs_qiime_ver9_99_25.07.2023.fasta \
+--output-path unite-ver9-seqs_99_25.07.2023.qza
+
+# 导入分类学文件
+qiime tools import \
+--type FeatureData[Taxonomy] \
+--input-path /home/zwang/Database/UNITE_qiime/sh_taxonomy_qiime_ver9_99_25.07.2023.txt \
+--output-path unite-ver9-taxonomy_99_25.07.2023.qza \
+--input-format HeaderlessTSVTaxonomyFormat
+
+# 训练分类器
+# 耗时5h+ 70G内存
+nohup time qiime feature-classifier fit-classifier-naive-bayes \
+--i-reference-reads unite-ver9-seqs_99_25.07.2023.qza \
+--i-reference-taxonomy unite-ver9-taxonomy_99_25.07.2023.qza \
+--o-classifier unite-ver9-99-classifier-25.07.2023.qza &
